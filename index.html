@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>One Div</title>
+	<meta name="description" content="Drawings made with a single div and CSS, by Akash Sharma.">
+	<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Ccircle cx='5' cy='5' r='5' fill='%23e76f51'/%3E%3C/svg%3E">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&display=swap">
+	<link rel="stylesheet" href="assets/site.css?v=10">
+	<script src="assets/site.js" defer></script>
+</head>
+<body>
+	<header class="masthead">
+		<h1 class="masthead__title">One Div<span class="masthead__dot" aria-hidden="true"></span></h1>
+		<p class="masthead__lede">What can a single <code>&lt;div&gt;</code> become? A collection of illustrations built entirely with CSS — no images, no SVGs. Just HTML, CSS, and a little imagination, with every drawing starting from a single element.</p>
+		<p class="masthead__meta">
+			By <a href="https://akashsrma.com">Akash Sharma</a>.
+			A tribute to <a href="https://a.singlediv.com/">A Single Div</a> by Lynn Fisher.
+		</p>
+		<p class="masthead__note">Every line typed by hand, the old&#8209;school way: Stack Overflow, MDN, CodePen and a lot of <span>elbow grease</span>. <i>— Akash</i></p>
+	</header>
+
+	<main>
+		<div class="toolbar">
+			<p class="toolbar__count" data-count aria-live="polite"></p>
+			<div class="toolbar__filters" role="group" aria-label="Filter by level" data-filters></div>
+		</div>
+
+		<ol class="grid" data-grid></ol>
+		<p class="empty" data-empty hidden>No drawings yet.</p>
+	</main>
+
+	<footer class="colophon">
+		<p>Every drawing is the same markup: <code>&lt;div class="single-div"&gt;&lt;/div&gt;</code>. Open one to see its CSS.</p>
+	</footer>
+
+	<dialog class="viewer" data-viewer aria-labelledby="viewer-title">
+		<div class="viewer__inner">
+			<div class="viewer__stage">
+				<div class="viewer__art" data-viewer-art></div>
+				<div class="viewer__zoom" role="group" aria-label="Zoom">
+					<button type="button" data-zoom="1" aria-pressed="true">1×</button>
+					<button type="button" data-zoom="2" aria-pressed="false">2×</button>
+				</div>
+			</div>
+
+			<div class="viewer__info">
+				<p class="viewer__eyebrow" data-viewer-eyebrow></p>
+				<h2 class="viewer__title" id="viewer-title" data-viewer-title></h2>
+				<p class="viewer__dates" data-viewer-dates></p>
+
+				<div class="code">
+					<div class="code__bar">
+						<span>CSS</span>
+						<button type="button" class="code__copy" data-copy>Copy</button>
+					</div>
+					<pre class="code__body"><code data-viewer-css></code></pre>
+				</div>
+				<div class="code code--html">
+					<div class="code__bar"><span>HTML</span></div>
+					<pre class="code__body"><code>&lt;div class="single-div"&gt;&lt;/div&gt;</code></pre>
+				</div>
+			</div>
+
+			<nav class="viewer__nav" aria-label="Drawings">
+				<button type="button" data-prev aria-label="Previous drawing">←</button>
+				<button type="button" data-close aria-label="Close">Close</button>
+				<button type="button" data-next aria-label="Next drawing">→</button>
+			</nav>
+		</div>
+	</dialog>
+</body>
+</html>

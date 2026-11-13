@@ -1,0 +1,24 @@
+<!--
+  02 · Sunset bands · level 1
+  Submitted: 2026-10-21 · Revised: 2026-10-21 (band size in a --band custom property, refactored at Akash's request)
+  CodePen: (not given)
+-->
+<div class="single-div-stage">
+  <div class="single-div"></div>
+</div>
+
+<style>
+.single-div {
+  --band: calc(100% / 5);
+
+  width: 200px; height: 200px;
+  background:
+    linear-gradient(
+      #ffd166 var(--band),
+      #f4a261 var(--band) calc(var(--band) * 2),
+      #e76f51 calc(var(--band) * 2) calc(var(--band) * 3),
+      #c1121f calc(var(--band) * 3) calc(var(--band) * 4),
+      #6d597a calc(var(--band) * 4)
+    );
+}
+</style>
