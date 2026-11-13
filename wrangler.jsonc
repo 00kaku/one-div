@@ -1,0 +1,8 @@
+{
+	// Cloudflare Workers static assets: serve this folder as it is, no build step.
+	"name": "one-div",
+	"compatibility_date": "2026-06-01",
+	"assets": {
+		"directory": "./"
+	}
+}

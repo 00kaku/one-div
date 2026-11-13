@@ -45,6 +45,8 @@ pieces.json         one entry per drawing
 pieces/NN-slug.html one file per drawing: the markup and its CSS, exactly as written
 thumbs/             README thumbnails (generated)
 tools/              render.html + readme.py, which make the thumbnails and the table above
+wrangler.jsonc      Cloudflare config: serve this folder as static files
+.assetsignore       repo files that aren't uploaded to the site
 ```
 
 Each piece renders inside its own shadow root, so one drawing's `.single-div` rule can't leak into another. Each tile's background colour and width come from `pieces.json` (`bg`, `wide`), not from the drawing's CSS.
