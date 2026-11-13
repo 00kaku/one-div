@@ -2,15 +2,30 @@
 // so each piece's `.single-div` rule can't leak into another.
 
 const grid = document.querySelector( '[data-grid]' );
-const count = document.querySelector( '[data-count]' );
-const filters = document.querySelector( '[data-filters]' );
 const empty = document.querySelector( '[data-empty]' );
 const viewer = document.querySelector( '[data-viewer]' );
 
 // Frames the drawing inside each shadow root. The piece's own CSS comes after it.
 const STAGE_CSS = ':host { display: block; } .single-div-stage { display: grid; place-items: center; width: 200px; height: 200px; }';
 
+const REPO = 'https://github.com/00kaku/one-div/blob/production/';
+
 const pad = ( n ) => String( n ).padStart( 2, '0' );
+
+// Dark or light text, whichever reads better on a tile's colour.
+function inkFor( hex ) {
+	const h = hex.replace( '#', '' );
+	const full = h.length === 3 ? [ ...h ].map( ( c ) => c + c ).join( '' ) : h;
+	const [ r, g, b ] = [ 0, 2, 4 ].map( ( i ) => parseInt( full.slice( i, i + 2 ), 16 ) / 255 );
+	const lum = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+	return lum > 0.55 ? '#1d1b16' : '#fffdf8';
+}
+
+// 2026-10-21 → 21 Oct 2026
+function formatDate( iso ) {
+	const [ y, m, d ] = iso.split( '-' ).map( Number );
+	return new Date( y, m - 1, d ).toLocaleDateString( 'en-GB', { day: 'numeric', month: 'short', year: 'numeric' } );
+}
 
 // A piece file is a header comment, the stage markup, then one <style>.
 function parsePiece( html ) {
@@ -67,46 +82,39 @@ function renderGrid( pieces ) {
 	pieces.forEach( ( piece, i ) => {
 		const li = document.createElement( 'li' );
 		li.dataset.level = piece.level;
+		li.classList.toggle( 'wide', !! piece.wide );
+		const bg = piece.bg || '#f4efe4';
 		li.innerHTML = `
-			<button type="button" class="card" aria-label="${ pad( piece.n ) } ${ escapeHtml( piece.title ) }, open">
-				<span class="card__frame"><span class="card__art"></span></span>
-				<span class="card__caption">
-					<span class="card__n">${ pad( piece.n ) }</span>
-					<span class="card__title">${ escapeHtml( piece.title ) }</span>
-					<span class="card__level">Level ${ piece.level }</span>
-				</span>
+			<button type="button" class="tile" style="--tile-bg:${ bg };--tile-ink:${ inkFor( bg ) }" aria-label="${ pad( piece.n ) } ${ escapeHtml( piece.title ) }, open">
+				<span class="tile__art"></span>
+				<span class="tile__label"><b>${ pad( piece.n ) }</b>${ escapeHtml( piece.title ) }</span>
 			</button>`;
-		draw( li.querySelector( '.card__art' ), piece );
+		draw( li.querySelector( '.tile__art' ), piece );
 		li.querySelector( 'button' ).addEventListener( 'click', () => open( i ) );
 		grid.append( li );
 	} );
+	layout();
 }
 
-function renderFilters( pieces ) {
-	const levels = [ ...new Set( pieces.map( ( p ) => p.level ) ) ].sort();
-	const options = [ [ 'all', 'All' ], ...levels.map( ( l ) => [ String( l ), `Level ${ l }` ] ) ];
-
-	filters.innerHTML = options.map( ( [ value, label ] ) =>
-		`<button type="button" data-level="${ value }" aria-pressed="${ value === 'all' }">${ label }</button>`
-	).join( '' );
-
-	filters.addEventListener( 'click', ( e ) => {
-		const btn = e.target.closest( 'button' );
-		if ( ! btn ) {
-			return;
+// Wide tiles take a full row. A half tile left alone on its row (before a
+// wide one, or at the end) stretches too, so the wall never has a hole.
+function layout() {
+	let halves = [];
+	const flush = () => {
+		if ( halves.length % 2 ) {
+			halves[ halves.length - 1 ].classList.add( 'is-wide' );
 		}
-		filters.querySelectorAll( 'button' ).forEach( ( b ) => b.setAttribute( 'aria-pressed', b === btn ) );
-		let shown = 0;
-		grid.querySelectorAll( 'li' ).forEach( ( li ) => {
-			li.hidden = btn.dataset.level !== 'all' && li.dataset.level !== btn.dataset.level;
-			shown += li.hidden ? 0 : 1;
-		} );
-		setCount( shown );
+		halves = [];
+	};
+	grid.querySelectorAll( 'li' ).forEach( ( li ) => {
+		li.classList.toggle( 'is-wide', li.classList.contains( 'wide' ) );
+		if ( li.classList.contains( 'wide' ) ) {
+			flush();
+		} else {
+			halves.push( li );
+		}
 	} );
-}
-
-function setCount( n ) {
-	count.textContent = `${ n } drawing${ n === 1 ? '' : 's' } · 1 element each`;
+	flush();
 }
 
 /* Viewer */
@@ -124,7 +132,10 @@ function show( i ) {
 	viewer.querySelector( '[data-viewer-eyebrow]' ).textContent = `${ pad( piece.n ) } · Level ${ piece.level }`;
 	viewer.querySelector( '[data-viewer-title]' ).textContent = piece.title;
 	viewer.querySelector( '[data-viewer-dates]' ).textContent =
-		`Drawn ${ piece.submitted }` + ( piece.revised ? ` · revised ${ piece.revised }` : '' );
+		`Drawn ${ formatDate( piece.submitted ) }` +
+		( piece.revised && piece.revised !== piece.submitted ? ` · revised ${ formatDate( piece.revised ) }` : '' );
+	viewer.querySelector( '[data-viewer-stage]' ).style.setProperty( '--stage-bg', piece.bg || '' );
+	viewer.querySelector( '[data-source]' ).href = REPO + piece.file;
 	cssOut.innerHTML = highlight( piece.css );
 	history.replaceState( null, '', `#${ pad( piece.n ) }-${ piece.slug }` );
 }
@@ -133,6 +144,8 @@ function open( i ) {
 	show( i );
 	if ( ! viewer.open ) {
 		viewer.showModal();
+		// Focus the dialog itself, not its first button, so no ring shows on open.
+		viewer.focus();
 	}
 }
 
@@ -177,8 +190,6 @@ load().then( ( loaded ) => {
 	pieces = loaded;
 	empty.hidden = pieces.length > 0;
 	renderGrid( pieces );
-	renderFilters( pieces );
-	setCount( pieces.length );
 
 	// A link like #06-mountain opens that drawing.
 	const fromHash = pieces.findIndex( ( p ) => location.hash === `#${ pad( p.n ) }-${ p.slug }` );
