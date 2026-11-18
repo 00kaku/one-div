@@ -31,6 +31,7 @@ Click a thumbnail to open it on the site, or the file to read its CSS.
 | <a href="https://onediv.akashsrma.com/#12-traffic-light"><img src="thumbs/12-traffic-light.png" width="120" alt="Traffic light"></a> | 12 | [Traffic light](https://onediv.akashsrma.com/#12-traffic-light) | 2 | [pieces/12-traffic-light.html](pieces/12-traffic-light.html) |
 | <a href="https://onediv.akashsrma.com/#13-dice"><img src="thumbs/13-dice.png" width="120" alt="Dice"></a> | 13 | [Dice](https://onediv.akashsrma.com/#13-dice) | 2 | [pieces/13-dice.html](pieces/13-dice.html) |
 | <a href="https://onediv.akashsrma.com/#14-battery"><img src="thumbs/14-battery.png" width="120" alt="Battery"></a> | 14 | [Battery](https://onediv.akashsrma.com/#14-battery) | 2 | [pieces/14-battery.html](pieces/14-battery.html) |
+| <a href="https://onediv.akashsrma.com/#15-bar-chart"><img src="thumbs/15-bar-chart.png" width="120" alt="Bar chart"></a> | 15 | [Bar chart](https://onediv.akashsrma.com/#15-bar-chart) | 2 | [pieces/15-bar-chart.html](pieces/15-bar-chart.html) |
 <!-- pieces:end -->
 
 ## How it's built

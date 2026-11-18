@@ -194,5 +194,19 @@
     "submitted": "2026-10-30",
     "revised": "2026-10-30",
     "animated": false
+  },
+  {
+    "n": 15,
+    "slug": "bar-chart",
+    "title": "Bar chart",
+    "level": 2,
+    "bg": "#f2b134",
+    "wide": false,
+    "tags": [],
+    "file": "pieces/15-bar-chart.html",
+    "codepen": null,
+    "submitted": "2026-11-19",
+    "revised": "2026-11-19",
+    "animated": false
   }
 ]
